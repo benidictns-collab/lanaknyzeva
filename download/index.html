@@ -1970,6 +1970,117 @@ textarea.fi { resize: vertical; min-height: 90px; }
 
 <script>
 /* ============================================================
+   TELEGRAM NOTIFICATION CONFIG
+   ============================================================
+   Чтобы включить отправку заявок в Telegram @lanaknyazevaschool:
+
+   ШАГ 1. Создайте бота:
+     1. Откройте @BotFather в Telegram
+     2. Отправьте /newbot, задайте имя и username
+     3. Получите BOT_TOKEN (например: 7123456789:AAH...BCD)
+
+   ШАГ 2. Получите CHAT_ID:
+     ВАРИАНТ A — если @lanaknyazevaschool это ЛИЧНЫЙ аккаунт:
+       1. Напишите вашему новому боту любое сообщение
+       2. Откройте в браузере:
+          https://api.telegram.org/bot<BOT_TOKEN>/getUpdates
+       3. Найдите в ответе "chat":{"id":XXXXXXXXX  — это и есть CHAT_ID
+
+     ВАРИАНТ B — если @lanaknyazevaschool это КАНАЛ:
+       1. Добавьте бота как администратора канала
+       2. CHAT_ID = -100 + ID канала (например: -1001234567890)
+          Узнать ID можно через @username_to_id_bot или getUpdates
+
+   ШАГ 3. Подставьте значения ниже:
+   ============================================================ */
+const TELEGRAM_CONFIG = {
+  BOT_TOKEN: 'PASTE_YOUR_BOT_TOKEN_HERE',   // TODO: вставить токен бота
+  CHAT_ID:   'PASTE_YOUR_CHAT_ID_HERE',     // TODO: вставить chat_id @lanaknyazevaschool
+  ENABLED:   true,                          // false = уведомления выключены
+};
+
+/**
+ * Отправляет уведомление о новой заявке в Telegram.
+ * @returns {Promise<{ok: boolean, error?: string}>}
+ */
+async function sendTelegramNotification(payload) {
+  if (!TELEGRAM_CONFIG.ENABLED) {
+    console.info('[Telegram] Уведомления выключены (TELEGRAM_CONFIG.ENABLED = false)');
+    return { ok: true, skipped: true };
+  }
+  if (!TELEGRAM_CONFIG.BOT_TOKEN || TELEGRAM_CONFIG.BOT_TOKEN === 'PASTE_YOUR_BOT_TOKEN_HERE') {
+    console.warn('[Telegram] BOT_TOKEN не настроен — заявка не отправлена в Telegram');
+    return { ok: false, error: 'BOT_TOKEN not configured' };
+  }
+
+  const text = formatTelegramMessage(payload);
+  const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`;
+
+  try {
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CONFIG.CHAT_ID,
+        text: text,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true,
+      }),
+    });
+    const data = await resp.json();
+    if (!data.ok) {
+      console.error('[Telegram] Ошибка отправки:', data.description);
+      return { ok: false, error: data.description };
+    }
+    console.info('[Telegram] Заявка отправлена успешно');
+    return { ok: true };
+  } catch (err) {
+    console.error('[Telegram] Сетевая ошибка:', err.message);
+    return { ok: false, error: err.message };
+  }
+}
+
+/**
+ * Форматирует текст уведомления для Telegram.
+ */
+function formatTelegramMessage(p) {
+  const dateStr = p.date
+    ? new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' })
+    : '—';
+  const lines = [
+    '🔔 <b>Новая заявка с сайта</b>',
+    '🏠 <b>LANA KNYAZEVA</b> · Aesthetic Clinic',
+    '━━━━━━━━━━━━━━━',
+    '',
+    `👤 <b>Клиент:</b> ${escapeHtml(p.name)}`,
+    `📞 <b>Телефон:</b> <code>${escapeHtml(p.phone)}</code>`,
+    '',
+    `💼 <b>Услуга:</b> ${escapeHtml(p.service)}`,
+    p.category ? `🏷 <b>Категория:</b> ${escapeHtml(p.category)}` : null,
+    p.duration ? `⏱ <b>Длительность:</b> ${escapeHtml(p.duration)}` : null,
+    p.price ? `💰 <b>Стоимость:</b> ${escapeHtml(p.price)}` : null,
+    '',
+    p.specialist ? `👩‍⚕️ <b>Специалист:</b> ${escapeHtml(p.specialist)}` : null,
+    `📅 <b>Дата:</b> ${escapeHtml(dateStr)}`,
+    `🕐 <b>Время:</b> ${escapeHtml(p.time || '—')}`,
+    '',
+    p.comment ? `💬 <b>Комментарий:</b>\n<i>${escapeHtml(p.comment)}</i>` : null,
+    '',
+    '━━━━━━━━━━━━━━━',
+    `🕐 Получено: ${new Date().toLocaleString('ru-RU')}`,
+  ].filter(Boolean);
+  return lines.join('\n');
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/* ============================================================
    DATA
    ============================================================ */
 const CATEGORIES = [
@@ -2387,7 +2498,7 @@ function goToStep(n) {
   if (window.lucide) lucide.createIcons();
 }
 
-function nextStep() {
+async function nextStep() {
   // validation per step
   if (bookingState.step === 1 && !bookingState.category) {
     toast('Выберите направление');
@@ -2409,6 +2520,7 @@ function nextStep() {
     // validate contacts
     const name = document.getElementById('fName').value.trim();
     const phone = document.getElementById('fPhone').value.trim();
+    const comment = document.getElementById('fComment').value.trim();
     const consent = document.getElementById('fConsent').checked;
     let ok = true;
     if (!name) { document.getElementById('fName').classList.add('error'); document.getElementById('errName').style.display = 'block'; ok = false; }
@@ -2418,11 +2530,48 @@ function nextStep() {
     if (!consent) { document.getElementById('errConsent').style.display = 'block'; ok = false; }
     else { document.getElementById('errConsent').style.display = 'none'; }
     if (!ok) return;
-    // success
+
+    // Show loading state on the submit button
+    const btn = document.getElementById('btnNext');
+    const originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Отправляем заявку… <span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(10,10,10,0.3);border-top-color:#0A0A0A;border-radius:50%;animation:spin 0.6s linear infinite"></span>';
+
+    // Compose payload
+    const cat = bookingState.category ? CATEGORIES.find(c => c.id === bookingState.category) : null;
+    const payload = {
+      name: name,
+      phone: phone,
+      comment: comment,
+      service: bookingState.service ? bookingState.service.name : null,
+      category: cat ? cat.name : null,
+      duration: bookingState.service ? bookingState.service.dur : null,
+      price: bookingState.service ? bookingState.service.price : null,
+      specialist: bookingState.specialist ? `${bookingState.specialist.name} (${bookingState.specialist.role})` : null,
+      date: bookingState.date,
+      time: bookingState.time,
+    };
+
+    // Send to Telegram (async, do not block the UX)
+    const tgResult = await sendTelegramNotification(payload);
+
+    // Show the success step
     renderSummary('successSummary', true);
     bookingState.step = 6;
     updateStepsUI();
+
+    // Notify the user about the Telegram delivery status
+    if (tgResult.skipped) {
+      toast('Заявка принята (уведомления выключены)');
+    } else if (tgResult.ok) {
+      toast('Заявка отправлена в Telegram ✓');
+    } else {
+      toast('Заявка принята. Telegram временно недоступен.');
+    }
+
     document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    btn.disabled = false;
+    btn.innerHTML = originalHtml;
     return;
   }
   if (bookingState.step < 5) {
