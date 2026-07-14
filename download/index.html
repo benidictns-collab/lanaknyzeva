@@ -210,7 +210,7 @@ section { position: relative; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(20px, 3vw, 40px);
+  gap: clamp(16px, 2vw, 32px);
   position: relative;
 }
 .logo { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
@@ -231,15 +231,14 @@ section { position: relative; }
 
 .nav {
   display: flex;
-  gap: clamp(20px, 2.2vw, 32px);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  gap: clamp(18px, 1.8vw, 28px);
+  flex: 1;
+  justify-content: center;
 }
 .nav a {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 400;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ivory-dim);
   position: relative;
@@ -260,7 +259,8 @@ section { position: relative; }
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
+  flex-shrink: 0;
   margin-left: auto;
 }
 .header-phone {
@@ -1452,7 +1452,12 @@ textarea.fi { resize: vertical; min-height: 90px; }
 .reveal-delay-4 { transition-delay: 0.4s; }
 
 /* ============ RESPONSIVE ============ */
-@media (max-width: 1024px) {
+/* Средние десктопы: прячем телефон, оставляя навигацию + кнопку */
+@media (max-width: 1280px) and (min-width: 901px) {
+  .header-phone { display: none; }
+  .header-right { gap: 0; }
+}
+@media (max-width: 900px) {
   .nav, .header-phone { display: none; }
   .burger { display: flex; }
   .header-right { gap: 14px; }
