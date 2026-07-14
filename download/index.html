@@ -98,6 +98,7 @@ section { position: relative; }
   line-height: 1.15;
   letter-spacing: -0.01em;
   color: var(--ivory);
+  margin-top: 22px;
 }
 .section-title em { font-style: italic; color: var(--gold); font-weight: 500; }
 .section-sub {
@@ -107,6 +108,18 @@ section { position: relative; }
   margin-top: 18px;
   line-height: 1.8;
 }
+.section-head { margin-bottom: 56px; }
+.section-head.center { text-align: center; }
+.section-head.center .eyebrow { justify-content: center; }
+.section-head.center .section-sub { margin-left: auto; margin-right: auto; }
+.section-head.split {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+.section-head.split .section-sub { margin-top: 0; max-width: 420px; }
 
 /* ============ LAYOUT ============ */
 .container { width: min(1240px, 92%); margin: 0 auto; }
@@ -184,37 +197,21 @@ section { position: relative; }
   justify-content: space-between;
   gap: 30px;
 }
-.logo { display: flex; align-items: center; gap: 14px; }
-.logo-mark {
-  width: 46px; height: 46px;
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: var(--gold);
-  background: rgba(201, 162, 39, 0.04);
+.logo { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.logo-img {
+  height: 56px;
+  width: auto;
+  display: block;
+  object-fit: contain;
   transition: all var(--t);
+  filter: drop-shadow(0 2px 12px rgba(201, 162, 39, 0.18));
 }
-.logo:hover .logo-mark { background: var(--gold); color: var(--bg); }
-.logo-text { display: flex; flex-direction: column; line-height: 1; }
-.logo-text .name {
-  font-family: var(--serif);
-  font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  color: var(--ivory);
+.logo:hover .logo-img {
+  filter: drop-shadow(0 4px 18px rgba(201, 162, 39, 0.35));
+  transform: scale(1.02);
 }
-.logo-text .tagline {
-  font-size: 0.6rem;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-top: 4px;
-}
+.header.scrolled .logo-img { height: 46px; }
+.footer .logo-img { height: 64px; }
 
 .nav { display: flex; gap: 36px; }
 .nav a {
@@ -362,7 +359,7 @@ section { position: relative; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 56px; }
 .hero-stats {
   display: flex;
-  gap: 50px;
+  gap: clamp(28px, 4vw, 56px);
   flex-wrap: wrap;
   padding-top: 36px;
   border-top: 1px solid var(--divider);
@@ -466,10 +463,10 @@ section { position: relative; }
 /* ============ ABOUT / ADVANTAGES ============ */
 .about-grid {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 80px;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: clamp(40px, 6vw, 80px);
   align-items: start;
-  margin-top: 60px;
+  margin-top: 56px;
 }
 .about-text p {
   color: var(--ivory-dim);
@@ -542,8 +539,9 @@ section { position: relative; }
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 30px;
-  margin-bottom: 50px;
+  margin-bottom: 56px;
 }
+.services-head .section-title { margin-top: 22px; }
 .service-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -664,7 +662,7 @@ section { position: relative; }
   pointer-events: none;
 }
 .booking-inner { position: relative; z-index: 2; }
-.booking-head { text-align: center; margin-bottom: 60px; }
+.booking-head { text-align: center; margin-bottom: 56px; }
 .booking-head .eyebrow { justify-content: center; }
 .booking-head .eyebrow::after {
   content: ''; width: 32px; height: 1px; background: var(--gold); display: inline-block;
@@ -677,7 +675,7 @@ section { position: relative; }
   background: var(--bg-2);
   border: 1px solid var(--divider);
   border-radius: 6px;
-  padding: clamp(28px, 4vw, 50px);
+  padding: clamp(28px, 4vw, 56px);
   position: relative;
 }
 .booking-steps {
@@ -1194,7 +1192,7 @@ textarea.fi { resize: vertical; min-height: 90px; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 22px;
-  margin-top: 50px;
+  margin-top: 8px;
 }
 .review-card {
   background: var(--bg-2);
@@ -1379,10 +1377,13 @@ textarea.fi { resize: vertical; min-height: 90px; }
   .contacts-grid { grid-template-columns: 1fr; }
   .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
   .datetime-grid { grid-template-columns: 1fr; }
+  .services-head { flex-direction: column; align-items: flex-start; }
+  .services-head .section-sub { max-width: 620px; }
 }
 @media (max-width: 640px) {
-  .hero-stats { gap: 28px; }
-  .hero-stat .num { font-size: 1.7rem; }
+  .hero-stats { gap: 22px; }
+  .hero-stat .num { font-size: 1.6rem; }
+  .hero-stat .label { font-size: 0.64rem; }
   .advantages { grid-template-columns: 1fr; }
   .form-grid-2 { grid-template-columns: 1fr; }
   .booking-steps { gap: 4px; }
@@ -1392,9 +1393,13 @@ textarea.fi { resize: vertical; min-height: 90px; }
   .cat-grid { grid-template-columns: 1fr 1fr; }
   .spec-grid { grid-template-columns: 1fr 1fr; }
   .header-right .btn { padding: 11px 18px; font-size: 0.66rem; }
-  .logo-text .tagline { display: none; }
-  .logo-text .name { font-size: 0.92rem; letter-spacing: 0.2em; }
-  .logo-mark { width: 40px; height: 40px; font-size: 1rem; }
+  .logo-img { height: 44px; }
+  .header.scrolled .logo-img { height: 38px; }
+  .footer .logo-img { height: 52px; }
+  .section-pad { padding: clamp(56px, 12vw, 80px) 0; }
+  .section-head { margin-bottom: 40px; }
+  .booking-card { padding: 22px 18px; }
+  .booking-steps { margin-bottom: 32px; }
 }
 </style>
 </head>
@@ -1404,11 +1409,7 @@ textarea.fi { resize: vertical; min-height: 90px; }
 <header class="header" id="header">
   <div class="container header-inner">
     <a href="#hero" class="logo" aria-label="LANA KNYAZEVA — на главную">
-      <div class="logo-mark">L</div>
-      <div class="logo-text">
-        <span class="name">LANA KNYAZEVA</span>
-        <span class="tagline">Aesthetic Clinic</span>
-      </div>
+      <img src="logo.png" alt="LANA KNYAZEVA — премиальная клиника эстетической косметологии" class="logo-img" />
     </a>
     <nav class="nav" aria-label="Основная навигация">
       <a href="#about">О клинике</a>
@@ -1526,7 +1527,7 @@ textarea.fi { resize: vertical; min-height: 90px; }
 <!-- ============ ABOUT ============ -->
 <section class="section-pad" id="about">
   <div class="container">
-    <div class="reveal">
+    <div class="section-head reveal">
       <span class="eyebrow">О клинике</span>
       <h2 class="section-title">Пространство, где <em>наука</em><br>встречается с эстетикой</h2>
     </div>
@@ -1598,8 +1599,8 @@ textarea.fi { resize: vertical; min-height: 90px; }
 <section class="section-pad booking" id="booking">
   <div class="container booking-inner">
     <div class="booking-head reveal">
-      <span class="eyebrow" style="justify-content:center">Запись на приём</span>
-      <h2 class="section-title" style="margin-top:18px">Выберите время, <em>которое удобно вам</em></h2>
+      <span class="eyebrow">Запись на приём</span>
+      <h2 class="section-title">Выберите время, <em>которое удобно вам</em></h2>
       <p class="section-sub">Четыре шага — и протокол подобран. Мы свяжемся для подтверждения в течение пятнадцати минут.</p>
     </div>
 
@@ -1770,10 +1771,10 @@ textarea.fi { resize: vertical; min-height: 90px; }
 <!-- ============ REVIEWS ============ -->
 <section class="section-pad" id="reviews">
   <div class="container">
-    <div class="reveal" style="text-align:center; margin-bottom:20px">
-      <span class="eyebrow" style="justify-content:center">Отзывы гостей</span>
-      <h2 class="section-title" style="margin-top:18px">Слова, которые <em>дороже рекламы</em></h2>
-      <p class="section-sub" style="margin-left:auto; margin-right:auto; text-align:center">Подлинные впечатления наших гостей — основа доверия и мотивация совершенствовать сервис каждый день.</p>
+    <div class="section-head center reveal">
+      <span class="eyebrow">Отзывы гостей</span>
+      <h2 class="section-title">Слова, которые <em>дороже рекламы</em></h2>
+      <p class="section-sub">Подлинные впечатления наших гостей — основа доверия и мотивация совершенствовать сервис каждый день.</p>
     </div>
     <div class="reviews-grid" id="reviewsGrid"></div>
   </div>
@@ -1782,7 +1783,7 @@ textarea.fi { resize: vertical; min-height: 90px; }
 <!-- ============ CONTACTS ============ -->
 <section class="section-pad" id="contacts" style="background: var(--bg-2); border-top:1px solid var(--divider)">
   <div class="container">
-    <div class="reveal">
+    <div class="section-head reveal">
       <span class="eyebrow">Контакты</span>
       <h2 class="section-title">Где нас <em>найти</em></h2>
     </div>
@@ -1831,11 +1832,7 @@ textarea.fi { resize: vertical; min-height: 90px; }
     <div class="footer-top">
       <div class="footer-brand">
         <a href="#hero" class="logo">
-          <div class="logo-mark">L</div>
-          <div class="logo-text">
-            <span class="name">LANA KNYAZEVA</span>
-            <span class="tagline">Aesthetic Clinic</span>
-          </div>
+          <img src="logo.png" alt="LANA KNYAZEVA — премиальная клиника эстетической косметологии" class="logo-img" />
         </a>
         <p>Премиальная клиника и школа эстетической косметологии в Ростове-на-Дону. Инъекционные и аппаратные методики, индивидуальный протокол для каждого гостя.</p>
       </div>
