@@ -181,6 +181,9 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
   const [errors, setErrors] = useState<{ name?: boolean; phone?: boolean; consent?: boolean }>({});
   const [submitting, setSubmitting] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [takenSlots, setTakenSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [slotError, setSlotError] = useState<string | null>(null);
 
   // Handle preselect from services section
   if (preselect) {
@@ -198,6 +201,37 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
+  };
+
+  // Загрузка занятых слотов с сервера при выборе даты (и опционально специалиста)
+  const fetchTakenSlots = async (date: Date, specialist?: Specialist | null) => {
+    setLoadingSlots(true);
+    setTakenSlots([]);
+    try {
+      const dateStr = formatDateISO(date);
+      const params = new URLSearchParams({ date: dateStr });
+      // ВАЖНО: строка специалиста должна совпадать с тем, что отправляется при POST
+      if (specialist) {
+        params.set('specialist', `${specialist.name} (${specialist.role})`);
+      }
+      const resp = await fetch(`/api/bookings/taken?${params.toString()}`);
+      const data = await resp.json();
+      if (data.ok && Array.isArray(data.taken)) {
+        setTakenSlots(data.taken);
+      }
+    } catch (err) {
+      console.error('[booking] fetch taken slots failed:', err);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
+
+  // Форматирование Date → YYYY-MM-DD (локально, без сдвига таймзоны)
+  const formatDateISO = (d: Date): string => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   };
 
   const nextStep = async () => {
@@ -226,7 +260,53 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
       if (Object.keys(newErrors).length > 0) return;
 
       setSubmitting(true);
+      setSlotError(null);
       const cat = state.category ? CATEGORIES.find((c) => c.id === state.category) : null;
+
+      // 1) Сохраняем запись в БД через API (atomarnая защита от двойного бронирования)
+      let bookingOk = false;
+      let bookingMessage = '';
+      try {
+        const resp = await fetch('/api/bookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: state.name,
+            phone: state.phone,
+            comment: state.comment,
+            service: state.service?.name || '',
+            category: cat?.name || '',
+            duration: state.service?.dur || '',
+            price: state.service?.price || '',
+            specialist: state.specialist
+              ? `${state.specialist.name} (${state.specialist.role})`
+              : null,
+            date: state.date ? formatDateISO(state.date) : '',
+            time: state.time || '',
+          }),
+        });
+        const data = await resp.json();
+        if (resp.ok && data.ok) {
+          bookingOk = true;
+        } else if (resp.status === 409 || data.error === 'slot_taken') {
+          // Слот занят — возвращаем пользователя на шаг выбора времени
+          bookingMessage = data.message || 'Это время только что забронировали.';
+          setSlotError(bookingMessage);
+          setSubmitting(false);
+          // Обновляем занятые слоты и возвращаемся на шаг 4
+          if (state.date) await fetchTakenSlots(state.date, state.specialist);
+          update({ step: 4, time: null });
+          showToast(bookingMessage);
+          return;
+        } else {
+          bookingMessage = data.message || 'Не удалось создать запись. Попробуйте ещё раз.';
+        }
+      } catch (err) {
+        console.error('[booking] create failed:', err);
+        bookingMessage = 'Сетевая ошибка. Проверьте подключение и попробуйте снова.';
+      }
+
+      // 2) Опционально: отправляем уведомление в Telegram (не блокируем успех записи)
       const tgResult = await sendTelegramNotification({
         name: state.name,
         phone: state.phone,
@@ -239,9 +319,15 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
       });
       setSubmitting(false);
 
-      if (tgResult.skipped) showToast('Заявка принята (уведомления выключены)');
-      else if (tgResult.ok) showToast('Заявка отправлена в Telegram ✓');
-      else showToast('Заявка принята. Telegram временно недоступен.');
+      if (!bookingOk) {
+        showToast(bookingMessage || 'Ошибка при создании записи');
+        return;
+      }
+
+      // Успех — показываем toast с информацией
+      if (tgResult.skipped) showToast('Запись подтверждена ✓');
+      else if (tgResult.ok) showToast('Запись создана · уведомление отправлено в Telegram ✓');
+      else showToast('Запись подтверждена ✓');
 
       update({ step: 6 });
       setTimeout(() => {
@@ -249,7 +335,14 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
       }, 50);
       return;
     }
-    if (state.step < 5) update({ step: state.step + 1 });
+    if (state.step < 5) {
+      const next = state.step + 1;
+      update({ step: next });
+      // При переходе на шаг 4 (дата/время) — подгружаем занятые слоты, если дата уже выбрана
+      if (next === 4 && state.date) {
+        fetchTakenSlots(state.date, state.specialist);
+      }
+    }
   };
 
   const prevStep = () => {
@@ -270,6 +363,8 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
       consent: false,
     });
     setErrors({});
+    setTakenSlots([]);
+    setSlotError(null);
   };
 
   const phoneMask = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -590,7 +685,12 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
                         return (
                           <button
                             key={day}
-                            onClick={() => !isPast && update({ date: dateObj, time: null })}
+                            onClick={() => {
+                              if (isPast) return;
+                              update({ date: dateObj, time: null });
+                              setSlotError(null);
+                              fetchTakenSlots(dateObj, state.specialist);
+                            }}
                             disabled={isPast}
                             className={`aspect-square grid place-items-center text-sm rounded-sm border transition-all ${
                               isSelected
@@ -610,24 +710,54 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
                   </div>
                   {/* Time slots */}
                   <div className="bg-background border border-border rounded-sm p-4">
-                    <div className="font-serif-display text-base text-foreground mb-3.5">
-                      Доступное время
+                    <div className="flex items-center justify-between mb-3.5">
+                      <span className="font-serif-display text-base text-foreground">
+                        Доступное время
+                      </span>
+                      {loadingSlots && (
+                        <span className="inline-flex items-center gap-2 text-[0.66rem] tracking-wide uppercase text-muted-foreground/70">
+                          <span className="w-3 h-3 border border-primary/30 border-t-primary rounded-full animate-spin" />
+                          Загрузка…
+                        </span>
+                      )}
+                      {!loadingSlots && state.date && takenSlots.length > 0 && (
+                        <span className="text-[0.66rem] tracking-wide uppercase text-muted-foreground/70">
+                          Забронировано: {takenSlots.length}
+                        </span>
+                      )}
                     </div>
                     {state.date ? (
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         {TIME_SLOTS.map((slot) => {
-                          const seed = state.date!.getDate();
-                          const disabled = (parseInt(slot) + seed) % 4 === 0;
+                          // Запрещаем слоты в прошлом (если выбран сегодняшний день)
+                          const now = new Date();
+                          const isToday = state.date!.toDateString() === now.toDateString();
+                          const [h, m] = slot.split(':').map(Number);
+                          const slotDateTime = new Date(state.date!);
+                          slotDateTime.setHours(h, m, 0, 0);
+                          const isPastToday = isToday && slotDateTime < now;
+
+                          const taken = takenSlots.includes(slot);
+                          const disabled = taken || isPastToday;
                           const selected = state.time === slot;
                           return (
                             <button
                               key={slot}
                               onClick={() => !disabled && update({ time: slot })}
                               disabled={disabled}
+                              title={
+                                taken
+                                  ? 'Это время уже забронировано'
+                                  : isPastToday
+                                  ? 'Это время уже прошло'
+                                  : ''
+                              }
                               className={`py-2.5 text-center text-sm border rounded-sm transition-all ${
                                 selected
                                   ? 'bg-primary text-background border-primary'
-                                  : disabled
+                                  : taken
+                                  ? 'text-muted-foreground/30 cursor-not-allowed line-through border-transparent bg-muted/30'
+                                  : isPastToday
                                   ? 'text-muted-foreground/20 cursor-not-allowed line-through border-transparent'
                                   : 'text-muted-foreground border-border hover:border-primary hover:text-foreground'
                               }`}
@@ -640,6 +770,11 @@ export function Booking({ preselect, onConsumePreselect }: BookingProps) {
                     ) : (
                       <div className="text-muted-foreground/70 text-sm text-center py-5 italic">
                         Сначала выберите дату в календаре
+                      </div>
+                    )}
+                    {slotError && (
+                      <div className="mt-3 p-3 border border-destructive/40 rounded-sm bg-destructive/5 text-xs text-destructive">
+                        {slotError}
                       </div>
                     )}
                   </div>
