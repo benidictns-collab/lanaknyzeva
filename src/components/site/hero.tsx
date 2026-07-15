@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const container = {
   hidden: {},
@@ -98,20 +97,20 @@ export function Hero({ onBookClick }: HeroProps) {
               variants={item}
               className="flex flex-wrap justify-center lg:justify-start gap-4 mb-14"
             >
-              <Button
+              <button
                 onClick={onBookClick}
-                className="bg-gold-gradient hover:shadow-gold-glow text-background hover:bg-primary border border-primary text-xs font-medium tracking-[0.22em] uppercase rounded-sm px-8 py-[15px] transition-all duration-300 hover:-translate-y-0.5 group"
+                className="inline-flex items-center justify-center gap-2 bg-gold-gradient hover:shadow-gold-glow text-background hover:bg-primary border border-primary text-xs font-medium tracking-[0.22em] uppercase rounded-sm h-[52px] px-8 transition-all duration-300 hover:-translate-y-0.5 group cursor-pointer"
               >
                 Записаться на приём
                 <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-              </Button>
+              </button>
               <a
                 href="#services"
                 onClick={(e) => {
                   e.preventDefault();
                   document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-[15px] text-xs font-medium tracking-[0.22em] uppercase rounded-sm border border-primary text-primary hover:bg-primary hover:text-background transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2.5 h-[52px] px-8 text-xs font-medium tracking-[0.22em] uppercase rounded-sm border border-primary text-primary hover:bg-primary hover:text-background transition-all duration-300"
               >
                 Каталог услуг
               </a>
