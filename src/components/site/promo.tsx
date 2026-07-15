@@ -25,10 +25,10 @@ export function Promo({ onBookClick }: PromoProps) {
             className="relative aspect-[4/5] rounded-sm overflow-hidden border border-gold-soft max-w-md mx-auto w-full"
           >
             <img
-              src="https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=85"
-              alt="Интерьер премиального спа-кабинета в тёплом свете"
+              src="/promo-cosmetology.jpg"
+              alt="Процедура эстетической косметологии в премиальной клинике LANA KNYAZEVA"
               loading="lazy"
-              className="w-full h-full object-cover brightness-[0.85] saturate-[0.95]"
+              className="w-full h-full object-cover brightness-[0.9] saturate-[0.95]"
             />
             <div
               className="absolute inset-0"
