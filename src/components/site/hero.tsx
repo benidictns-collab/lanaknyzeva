@@ -149,17 +149,17 @@ export function Hero({ onBookClick }: HeroProps) {
             className="relative aspect-[3/4] rounded-sm overflow-hidden border border-gold-soft max-w-md mx-auto w-full"
           >
             <img
-              src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=900&q=85"
-              alt="Крупный план ухоженной кожи лица в тёплом свете на чёрном фоне"
-              className="w-full h-full object-cover brightness-[0.78] saturate-[0.92] transition-transform duration-[8s] hover:scale-105"
+              src="/hero-mesotherapy.jpg"
+              alt="Процедура мезотерапии лица — инъекционное омоложение премиальной клиники LANA KNYAZEVA"
+              className="w-full h-full object-cover brightness-[0.82] saturate-[0.95] transition-transform duration-[8s] hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6 right-6 z-10">
               <p className="text-[0.66rem] tracking-[0.3em] uppercase text-primary mb-2">
-                Индивидуальный протокол
+                Мезотерапия лица
               </p>
               <p className="font-serif-display italic text-base text-foreground leading-snug">
-                Подбор методики после первичной консультации
+                Инъекционный коктейль витаминов и пептидов для омоложения
               </p>
             </div>
           </motion.div>
