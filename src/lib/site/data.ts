@@ -572,24 +572,24 @@ export const SPECIALISTS: Specialist[] = [
   },
   {
     id: 's2',
-    name: 'Анна Воронцова',
+    name: 'Татьяна',
     role: 'Врач-косметолог',
     rating: '4.9',
     img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&q=85',
   },
   {
     id: 's3',
-    name: 'Елена Соколова',
+    name: 'Евгения',
     role: 'Эстетист · Лазерный специалист',
     rating: '4.9',
     img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=200&q=85',
   },
   {
     id: 's4',
-    name: 'Мария Дятлова',
-    role: 'Врач-косметолог · Инъекционист',
+    name: 'Андрей',
+    role: 'Главный стилист',
     rating: '5.0',
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=85',
+    img: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=200&q=85',
   },
 ];
 
