@@ -574,14 +574,14 @@ export const SPECIALISTS: Specialist[] = [
     id: 's2',
     name: 'Татьяна',
     role: 'Врач-косметолог',
-    rating: '4.9',
+    rating: '5.0',
     img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&q=85',
   },
   {
     id: 's3',
     name: 'Евгения',
     role: 'Эстетист · Лазерный специалист',
-    rating: '4.9',
+    rating: '5.0',
     img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=200&q=85',
   },
   {
