@@ -67,3 +67,4 @@ server.log
 # Build outputs
 /dist/
 /standalone/
+.zscripts/
