@@ -568,7 +568,7 @@ export const SPECIALISTS: Specialist[] = [
     name: 'Лана Князева',
     role: 'Главный врач · Основатель',
     rating: '5.0',
-    img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&q=85',
+    img: '/specialists/lana-knyazeva.jpg',
   },
   {
     id: 's2',
