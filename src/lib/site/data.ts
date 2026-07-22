@@ -647,8 +647,12 @@ export const REVIEWS: Review[] = [
 ];
 
 // Telegram notification config
+// Значения читаются из переменных окружения (.env.local) — токены НЕ хранятся в коде.
+// В .env.local должны быть:
+//   NEXT_PUBLIC_TELEGRAM_BOT_TOKEN=<bot_token_от_BotFather>
+//   NEXT_PUBLIC_TELEGRAM_CHAT_ID=<chat_id_получателя>
 export const TELEGRAM_CONFIG = {
-  BOT_TOKEN: 'PASTE_YOUR_BOT_TOKEN_HERE',
-  CHAT_ID: 'PASTE_YOUR_CHAT_ID_HERE',
+  BOT_TOKEN: process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN || 'PASTE_YOUR_BOT_TOKEN_HERE',
+  CHAT_ID: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID || 'PASTE_YOUR_CHAT_ID_HERE',
   ENABLED: true,
 };

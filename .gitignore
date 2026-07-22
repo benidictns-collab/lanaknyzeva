@@ -52,3 +52,18 @@ prompt
 server.log
 # Skills directory
 /skills/
+# Database (SQLite local file — do not commit)
+/db/
+*.db
+*.db-journal
+
+# User uploads (temp files from chat)
+/upload/
+/tool-results/
+
+# Helper scripts with potential secrets
+/scripts/find_telegram_chat_id.py
+
+# Build outputs
+/dist/
+/standalone/
