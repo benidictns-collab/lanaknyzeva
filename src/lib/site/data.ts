@@ -582,7 +582,7 @@ export const SPECIALISTS: Specialist[] = [
     name: 'Евгения',
     role: 'Эстетист · Лазерный специалист',
     rating: '5.0',
-    img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=200&q=85',
+    img: '/specialists/evgeniya.jpg',
   },
   {
     id: 's4',
