@@ -120,3 +120,42 @@ model Booking {
 ## 📝 Лицензия
 
 © 2026 Школа Ланы Князевой. Все права защищены.
+
+---
+
+## ☁️ Развёртывание на Timeweb Cloud (краткая версия)
+
+Подробное руководство — в [DEPLOY.md](./DEPLOY.md).
+
+### Быстрые шаги:
+
+1. **Создайте App** на [Timeweb Cloud](https://timeweb.cloud/services) → Deploy from GitHub → выберите `benidictns-collab/lanaknyzeva`, ветка `main`
+
+2. **Build command**: `npm run build`
+3. **Start command**: `npm start`
+4. **Port**: `3000`
+5. **Health check path**: `/api/health`
+
+6. **Добавьте переменные окружения** (обязательно!):
+
+| Имя | Значение |
+|-----|----------|
+| `DATABASE_URL` | `file:./db/custom.db` |
+| `NEXT_PUBLIC_TELEGRAM_BOT_TOKEN` | `8627243707:AAF3D1xRR-ayeP3Yq2YkUoWfBbjIopzFp_4` |
+| `NEXT_PUBLIC_TELEGRAM_CHAT_ID` | `5462119985` |
+
+7. **Deploy** → дождитесь статуса Running → откройте выданный URL.
+
+### Альтернатива через Docker
+
+В панели Timeweb Cloud выберите **Docker** вместо GitHub — в репозитории уже есть готовый `Dockerfile` с встроенным healthcheck. Те же переменные окружения нужно задать.
+
+### Что делает `npm start`?
+
+Скрипт [`scripts/start.mjs`](./scripts/start.mjs) автоматически:
+1. Читает `PORT` из env (Timeweb Cloud задаёт автоматически)
+2. Создаёт директорию `db/` если её нет
+3. Запускает `prisma db push` для инициализации схемы БД
+4. Запускает `next start` на нужном порту
+
+Это решает проблему с перезапуском контейнера, когда БД не инициализирована.

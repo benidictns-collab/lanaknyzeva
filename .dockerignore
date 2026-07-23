@@ -1,0 +1,37 @@
+# Зависимости и кэш — устанавливаются внутри контейнера
+node_modules
+.next
+out
+build
+dist
+
+# Локальные env-файлы (в проде задаются через переменные окружения платформы)
+.env
+.env.local
+.env.*.local
+
+# Git и IDE
+.git
+.gitignore
+.github
+.vscode
+.idea
+
+# БД и временные файлы
+db/*.db
+db/*.db-journal
+*.log
+dev.log
+
+# Песочница и служебные директории
+.zscripts
+upload
+tool-results
+download
+examples
+mini-services
+skills
+
+# Документация и скрипты, не нужные в runtime
+DEPLOY.md
+scripts/find_telegram_chat_id.py
