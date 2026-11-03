@@ -37,6 +37,10 @@ export function SiteHeader({ onBookClick }: HeaderProps) {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
+    if (href === '#booking') {
+      onBookClick();
+      return;
+    }
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };

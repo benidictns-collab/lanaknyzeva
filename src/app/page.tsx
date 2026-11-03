@@ -5,26 +5,17 @@ import { SiteHeader } from '@/components/site/site-header';
 import { Hero } from '@/components/site/hero';
 import { About, Marquee } from '@/components/site/about';
 import { Services } from '@/components/site/services';
-import { Booking } from '@/components/site/booking';
+import { Booking, trackBookingOpen } from '@/components/site/yclients-booking';
 import { Promo } from '@/components/site/promo';
 import { Reviews } from '@/components/site/reviews';
 import { Contacts, SiteFooter } from '@/components/site/contacts-footer';
 
 export default function Home() {
-  const [bookingPreselect, setBookingPreselect] = useState<{
-    catId: string;
-    idx: number;
-  } | null>(null);
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   const openBooking = useCallback(() => {
-    document.querySelector('#booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
-
-  const handleBookService = useCallback((catId: string, idx: number) => {
-    setBookingPreselect({ catId, idx });
-    setTimeout(() => {
-      document.querySelector('#booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
+    trackBookingOpen();
+    setBookingOpen(true);
   }, []);
 
   return (
@@ -33,8 +24,8 @@ export default function Home() {
       <Hero onBookClick={openBooking} />
       <Marquee />
       <About />
-      <Services onBookService={handleBookService} />
-      <Booking preselect={bookingPreselect} onConsumePreselect={() => setBookingPreselect(null)} />
+      <Services onBookService={openBooking} />
+      <Booking open={bookingOpen} onOpenChange={setBookingOpen} onBookClick={openBooking} />
       <Promo onBookClick={openBooking} />
       <Reviews />
       <Contacts />
