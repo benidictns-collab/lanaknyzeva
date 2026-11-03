@@ -23,7 +23,7 @@ const playfair = Playfair_Display({
 
 const marcellus = Marcellus({
   variable: "--font-marcellus",
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   weight: ["400"],
 });
 
@@ -99,7 +99,6 @@ export default function RootLayout({
         <noscript>
           <div>
             {/* The tracking pixel is required for visits without JavaScript. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://mc.yandex.ru/watch/114052429"
               style={{ position: "absolute", left: "-9999px" }}
