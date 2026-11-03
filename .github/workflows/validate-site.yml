@@ -26,3 +26,14 @@ jobs:
         run: bun x eslint src/app/layout.tsx src/app/page.tsx src/components/site/yclients-booking.tsx src/app/api/bookings/route.ts src/app/api/bookings/taken/route.ts
       - run: bun run build
       - run: bun x tsc --noEmit
+      - name: Package home page preview
+        run: |
+          mkdir -p preview/_next
+          cp .next/server/app/index.html preview/index.html
+          cp -r .next/static preview/_next/static
+          cp -r public/. preview/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: home-preview
+          path: preview/
+          retention-days: 3
