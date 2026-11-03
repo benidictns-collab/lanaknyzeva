@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, ArrowRight, Sparkles, AlertCircle, ClipboardList, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,7 @@ type ServicesProps = {
 };
 
 export function Services({ onBookService }: ServicesProps) {
+  const openingBooking = useRef(false);
   const [activeCat, setActiveCat] = useState(CATEGORIES[0].id);
   const [modalService, setModalService] = useState<Service | null>(null);
   const [modalCategory, setModalCategory] = useState<Category | null>(null);
@@ -142,7 +143,12 @@ export function Services({ onBookService }: ServicesProps) {
         open={!!modalService}
         onOpenChange={(open) => !open && setModalService(null)}
       >
-        <DialogContent className="max-w-2xl bg-gradient-to-b from-card to-background border border-gold-soft p-0 overflow-hidden max-h-[calc(100dvh-40px)] overflow-y-auto">
+        <DialogContent onCloseAutoFocus={(event) => {
+          if (openingBooking.current) {
+            event.preventDefault();
+            openingBooking.current = false;
+          }
+        }} className="max-w-2xl bg-gradient-to-b from-card to-background border border-gold-soft p-0 overflow-hidden max-h-[calc(100dvh-40px)] overflow-y-auto">
           {modalService && modalCategory && (
             <div className="p-6 md:p-10">
               <span className="inline-block text-[0.68rem] font-medium tracking-[0.32em] uppercase text-primary mb-3">
@@ -223,12 +229,13 @@ export function Services({ onBookService }: ServicesProps) {
               <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-border">
                 <Button
                   onClick={() => {
+                    openingBooking.current = true;
                     setModalService(null);
                     if (modalCategory) onBookService(modalCategory.id, modalIdx);
                   }}
                   className="flex-1 bg-gold-gradient hover:shadow-gold-glow text-background hover:bg-primary border border-primary rounded-sm min-w-[180px]"
                 >
-                  Записаться на эту услугу
+                  Перейти к записи
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
                 <Button
