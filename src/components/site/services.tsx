@@ -38,7 +38,7 @@ export function Services({ onBookService }: ServicesProps) {
       <div className="mx-auto max-w-[1440px] px-5 md:px-[clamp(20px,5vw,100px)]">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.7 }}
@@ -60,7 +60,7 @@ export function Services({ onBookService }: ServicesProps) {
 
         {/* Tabs */}
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={false}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
@@ -85,7 +85,7 @@ export function Services({ onBookService }: ServicesProps) {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCat}
-            initial={{ opacity: 0, y: 10 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.4 }}
@@ -94,7 +94,7 @@ export function Services({ onBookService }: ServicesProps) {
             {services.map((svc, i) => (
               <motion.article
                 key={svc.name}
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.04 }}
                 whileHover={{ y: -4 }}

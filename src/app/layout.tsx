@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Geist, Geist_Mono, Playfair_Display, Marcellus } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { siteUrl } from "@/lib/site/search";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,13 +12,13 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  preload: false,
   subsets: ["latin"],
 });
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
 });
 
@@ -27,38 +28,30 @@ const marcellus = Marcellus({
   weight: ["400"],
 });
 
+const title = "Косметология в Ростове-на-Дону | LANA KNYAZEVA";
+const description =
+  "Косметология LANA KNYAZEVA в Ростове-на-Дону. Чистка лица, карбоновый пилинг, СМАС-лифтинг и лазерная эпиляция. Цены и онлайн-запись.";
+
 export const metadata: Metadata = {
-  title: "LANA KNYAZEVA — премиальная эстетическая косметология в Ростове-на-Дону",
-  description:
-    "Премиальная клиника и школа эстетической косметологии LANA KNYAZEVA в Ростове-на-Дону. Эстетическая косметология, лазерная эпиляция, мезотерапия, биоревитализация, ботулинотерапия, контурная пластика. Опытные специалисты, сертифицированные препараты, запись онлайн.",
-  keywords: [
-    "премиальная косметология",
-    "услуги косметолога",
-    "эстетическая косметология",
-    "лазерная эпиляция",
-    "мезотерапия",
-    "биоревитализация",
-    "ботулинотерапия",
-    "контурная пластика",
-    "Ростов-на-Дону",
-  ],
-  authors: [{ name: "LANA KNYAZEVA" }],
-  icons: {
-    icon: "/logo.png",
-  },
+  metadataBase: new URL(siteUrl),
+  alternates: { canonical: "/" },
+  title,
+  description,
+  icons: { icon: "/logo.png" },
   openGraph: {
-    title: "LANA KNYAZEVA — премиальная эстетическая косметология",
-    description:
-      "Премиальная клиника и школа эстетической косметологии в Ростове-на-Дону. Сертифицированные препараты, опытные специалисты, индивидуальный подход.",
+    title,
+    description,
+    url: "/",
     siteName: "LANA KNYAZEVA",
     type: "website",
     locale: "ru_RU",
+    images: [{ url: "/promo-cosmetology.jpg", alt: "Косметология LANA KNYAZEVA" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LANA KNYAZEVA — премиальная эстетическая косметология",
-    description:
-      "Премиальная клиника и школа эстетической косметологии в Ростове-на-Дону.",
+    title,
+    description,
+    images: ["/promo-cosmetology.jpg"],
   },
 };
 

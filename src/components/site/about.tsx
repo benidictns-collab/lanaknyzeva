@@ -31,7 +31,7 @@ export function About() {
     <section id="about" className="py-20 lg:py-32">
       <div className="mx-auto max-w-[1440px] px-5 md:px-[clamp(20px,5vw,100px)]">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.7 }}
@@ -48,7 +48,7 @@ export function About() {
         <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-12 lg:gap-20 items-start">
           {/* Text column */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.1 }}
@@ -76,7 +76,7 @@ export function About() {
 
           {/* Advantages grid */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -85,7 +85,7 @@ export function About() {
             {ADVANTAGES.map((adv, i) => (
               <motion.div
                 key={adv.title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}

@@ -11,7 +11,7 @@ export function Contacts() {
     >
       <div className="mx-auto max-w-[1440px] px-5 md:px-[clamp(20px,5vw,100px)]">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.7 }}
@@ -26,7 +26,7 @@ export function Contacts() {
         <div className="grid lg:grid-cols-[1fr_1.2fr] gap-12 items-stretch">
           {/* Info */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.1 }}
@@ -107,7 +107,7 @@ export function Contacts() {
 
           {/* Map */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.2 }}

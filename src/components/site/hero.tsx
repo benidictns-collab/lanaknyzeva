@@ -65,7 +65,7 @@ export function Hero({ onBookClick }: HeroProps) {
           {/* Text column */}
           <motion.div
             variants={container}
-            initial="hidden"
+            initial={false}
             animate="visible"
             className="text-center lg:text-left"
           >
@@ -124,7 +124,7 @@ export function Hero({ onBookClick }: HeroProps) {
               {STATS.map((stat, i) => (
                 <motion.div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 + i * 0.1, duration: 0.5 }}
                   className="text-center lg:text-left"
@@ -142,13 +142,18 @@ export function Hero({ onBookClick }: HeroProps) {
 
           {/* Visual */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="relative aspect-[3/4] rounded-sm overflow-hidden border border-gold-soft max-w-md mx-auto w-full"
           >
             <img
-              src="/hero-mesotherapy.jpg"
+              src="/hero-mesotherapy.webp"
+              srcSet="/hero-mesotherapy-480.webp 480w, /hero-mesotherapy.webp 960w"
+              sizes="(max-width: 488px) calc(100vw - 40px), 448px"
+              width={960}
+              height={1440}
+              fetchPriority="high"
               alt="Процедура мезотерапии лица — инъекционное омоложение премиальной клиники LANA KNYAZEVA"
               className="w-full h-full object-cover brightness-[0.82] saturate-[0.95] transition-transform duration-[8s] hover:scale-105"
             />

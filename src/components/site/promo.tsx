@@ -18,7 +18,7 @@ export function Promo({ onBookClick }: PromoProps) {
       <div className="mx-auto max-w-[1440px] px-5 md:px-[clamp(20px,5vw,100px)]">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={false}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.8 }}
@@ -48,7 +48,7 @@ export function Promo({ onBookClick }: PromoProps) {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.1 }}

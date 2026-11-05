@@ -9,7 +9,7 @@ export function Reviews() {
     <section id="reviews" className="py-20 lg:py-32">
       <div className="mx-auto max-w-[1440px] px-5 md:px-[clamp(20px,5vw,100px)]">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.7 }}
@@ -29,7 +29,7 @@ export function Reviews() {
           {REVIEWS.map((review, i) => (
             <motion.article
               key={review.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: (i % 3) * 0.1 }}
