@@ -30,7 +30,7 @@ const marcellus = Marcellus({
 
 const title = "Косметология в Ростове-на-Дону | LANA KNYAZEVA";
 const description =
-  "Косметология LANA KNYAZEVA в Ростове-на-Дону. Чистка лица, карбоновый пилинг, СМАС-лифтинг и лазерная эпиляция. Цены и онлайн-запись.";
+  "Косметология в Ростове-на-Дону: солярий, LPG, СМАС-лифтинг, чистка лица, лазерная биоревитализация, карбоновый пилинг и лазерная эпиляция. Запись в LANA KNYAZEVA.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

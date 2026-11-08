@@ -41,10 +41,21 @@ export default async function ServicePage({ params }: Props) {
       <p className="mt-6 max-w-xl text-lg text-muted-foreground">{service.description}</p>
       <section className="mt-10 border-t border-border pt-8">
         <h2 className="font-serif-display text-2xl">Как записаться</h2>
-        <p className="mt-4">В форме записи выберите «{service.bookingLabel}».</p>
-        <a className="mt-5 inline-block rounded-sm bg-gold-gradient px-6 py-3 text-background" href="https://n2289117.yclients.ru/">
-          Выбрать время в YCLIENTS
-        </a>
+        {service.bookingLabel ? (
+          <>
+            <p className="mt-4">В форме записи выберите «{service.bookingLabel}».</p>
+            <a className="mt-5 inline-block rounded-sm bg-gold-gradient px-6 py-3 text-background" href="https://n2289117.yclients.ru/">
+              Выбрать время и записаться
+            </a>
+          </>
+        ) : (
+          <>
+            <p className="mt-4">Для записи на эту процедуру позвоните администратору. Он уточнит условия, специалиста и доступное время.</p>
+            <a className="mt-5 inline-block rounded-sm bg-gold-gradient px-6 py-3 text-background" href="tel:+79885350637">
+              Записаться по телефону +7 988 535-06-37
+            </a>
+          </>
+        )}
         <p className="mt-6">Ростов-на-Дону, Социалистическая улица, 140</p>
         <a className="mt-2 inline-block text-primary underline" href={mapsUrl}>Открыть карточку в Яндекс Картах</a>
       </section>

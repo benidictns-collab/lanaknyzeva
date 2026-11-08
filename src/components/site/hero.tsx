@@ -77,20 +77,20 @@ export function Hero({ onBookClick }: HeroProps) {
               variants={item}
               className="font-serif-display font-normal text-4xl sm:text-5xl lg:text-[5rem] leading-[1.05] tracking-tight mt-6 mb-7"
             >
-              <span className="block">Искусство</span>
+              <span className="block">Косметология</span>
               <span className="block">
-                <em className="italic text-primary font-medium">безупречной</em> кожи
+                <em className="italic text-primary font-medium">в Ростове-на-Дону</em>
               </span>
-              <span className="block">и точёных линий</span>
+              <span className="block text-2xl mt-4">LANA KNYAZEVA</span>
             </motion.h1>
 
             <motion.p
               variants={item}
               className="text-base lg:text-[1.05rem] text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-[1.85] mb-10"
             >
-              Премиальная клиника и школа эстетической косметологии. Инъекционные и
-              аппаратные методики, сертифицированные препараты и индивидуальный протокол
-              для каждого гостя.
+              Солярий, LPG-массаж, СМАС-лифтинг, чистка лица, лазерная
+              биоревитализация, карбоновый пилинг и лазерная эпиляция.
+              Выберите услугу и запишитесь на Социалистической, 140.
             </motion.p>
 
             <motion.div
